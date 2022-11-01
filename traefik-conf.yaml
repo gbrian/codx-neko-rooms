@@ -1,0 +1,21 @@
+http:
+  services:
+    neko-rooms:
+      loadBalancer:
+        servers:
+          - url: "http://neko-rooms:8080"
+
+  middlewares:
+    neko-rooms-auth:
+      basicAuth:
+        usersFile: "/usersfile"
+
+  routers:
+    neko-rooms:
+      rule: PathPrefix(`/`) || PathPrefix(`/api`)
+      priority: 1
+      service: neko-rooms
+      entrypoints:
+        - web
+      middlewares:
+       - neko-rooms-auth
