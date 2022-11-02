@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  coder:
+    image: codercom/code-server:latest
+    user: root
+    environment:
+      - "DOCKER_USER=root"
+      - PASSWORD
+    volumes:
+      - ./settings.json:/root/.local/share/code-server/User/settings.json
+      - /root/github/gbrian/codx-neko-rooms:/home/coder/neko-rooms
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - 9080:8080

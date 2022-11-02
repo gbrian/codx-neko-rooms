@@ -6,7 +6,9 @@ PASSWORD=$2
 IP=$3
 
 # Generate auth file
-echo "$(htpasswd -nb $USER $PASSWORD)" > usersfile
+docker run \
+  --entrypoint htpasswd \
+  httpd:2 -Bbn $USER $PASSWORD > usersfile
 
 # Generate API_TOKEN
 export API_TOKEN=$(echo -nz "${USER}:${PASSWORD}" | md5sum | grep -o '^\S\+')
@@ -15,13 +17,19 @@ export API_TOKEN=$(echo -nz "${USER}:${PASSWORD}" | md5sum | grep -o '^\S\+')
 export NEKO_ROOMS_NAT1TO1=$IP
 export NEKO_ROOMS_EPR=59000-59300
 
-export NEKO_ROOMS_NEKO_IMAGES="codx* m1k1o* m1k1o/neko:firefox m1k1o/neko:chromium"
+export NEKO_ROOMS_NEKO_IMAGES="academy-hub.meetnav.com/* m1k1o/neko:firefox m1k1o/neko:chromium"
 export NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES="*dind"
 
 export NEKO_ROOMS_DEBUG=true
 
 export API_PROXY_CONF_ENDPOINT="https://api-codx.meetnav.com/api/neko-rooms/proxy?token=$API_TOKEN"
 
+export NEKO_ROOMS_LOGS=true
+export NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net
+export NEKO_ROOMS_TRAEFIK_ENTRYPOINT=web
+
+# Registry
+export NEKO_ROOMS_REGISTRY_DOMAIN="academy-hub.meetnav.com"
 
 echo "******* RUNNING SERVICES ********"
 echo ""
