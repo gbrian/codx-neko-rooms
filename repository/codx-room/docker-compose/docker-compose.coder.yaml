@@ -1,0 +1,17 @@
+version: "2"
+services:
+  codx-coder:
+    image: codx-coder
+    build:
+      context: .
+    user: $USER
+    environment:
+      - "PASSWORD=$PASSWORD"
+      - "GITHUB_USERNAME=$GITHUB_USERNAME"
+    volumes:
+      - ~/.config:/home/coder/.config"
+      - ~/.config:/root/.local/share/code-server/User"
+      - ~/:/home/coder"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
