@@ -1,0 +1,3 @@
+[submodule "neko-rooms"]
+	path = neko-rooms
+	url = https://github.com/gbrian/neko-rooms.git
