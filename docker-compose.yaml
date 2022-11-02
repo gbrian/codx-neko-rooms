@@ -8,7 +8,9 @@ networks:
 services:
   neko-rooms:
     container_name: "neko-rooms"
-    image: "m1k1o/neko-rooms:latest"
+    image: "codx/neko-rooms:latest"
+    build:
+      context: neko-rooms
     restart: "unless-stopped"
     environment:
       - "TZ"
@@ -16,9 +18,9 @@ services:
       - "NEKO_ROOMS_NAT1TO1"
       - "NEKO_ROOMS_TRAEFIK_DOMAIN=${NEKO_ROOMS_NAT1TO1}"
       - "NEKO_ROOMS_INSTANCE_URL=http://${NEKO_ROOMS_NAT1TO1}:8000/"
-      - "NEKO_ROOMS_TRAEFIK_ENTRYPOINT=web"
-      - "NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net"
-      - "NEKO_ROOMS_LOGS=true"
+      - "NEKO_ROOMS_TRAEFIK_ENTRYPOINT"
+      - "NEKO_ROOMS_TRAEFIK_NETWORK"
+      - "NEKO_ROOMS_LOGS"
       - "NEKO_ROOMS_NEKO_IMAGES"
       - "NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES"
       - "NEKO_ROOMS_DEBUG"
@@ -28,6 +30,22 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
       - "8080:8080"
+
+  registry:
+    image: registry:latest
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/usersfile
+    volumes:
+      - "$PWD/usersfile:/auth/usersfile"
+      - "/mnt/HC_Volume_24235669/registry/repositories:/repositories"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.rule=Host(`${NEKO_ROOMS_REGISTRY_DOMAIN}`)"
+      - "traefik.http.routers.registry.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
+      - "traefik.http.routers.registry.service=registry"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
 
   traefik:
     links:
@@ -43,9 +61,9 @@ services:
       - "--accesslog=true"
       - "--providers.file.directory=/traefik-conf"
       - "--providers.file.watch=true"
-      #- "--providers.docker=true"
-      #- "--providers.docker.exposedbydefault=false"
-      #- "--providers.docker.network=neko-rooms-net"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=neko-rooms-net"
       - "--providers.http=true"
       - "--providers.http.endpoint=${API_PROXY_CONF_ENDPOINT}"
       - "--providers.http.pollInterval=15s"
@@ -56,6 +74,6 @@ services:
       - "8800:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./usersfile:/usersfile"
-      - "./traefik-conf.yaml:/traefik-conf/base-conf.yaml"
+      - "$PWD/usersfile:/usersfile"
+      - "$PWD/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
 
