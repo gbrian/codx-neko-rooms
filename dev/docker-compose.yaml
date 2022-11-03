@@ -4,6 +4,7 @@ services:
   coder:
     image: codercom/code-server:latest
     user: root
+    restart: unless-stopped
     environment:
       - "DOCKER_USER=root"
       - PASSWORD

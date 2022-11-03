@@ -3,12 +3,12 @@ version: "2"
 networks:
   default:
     attachable: true
-    name: "neko-rooms-net"
+    name: "${NEKO_ROOMS_TRAEFIK_NETWORK}"
 
 services:
   neko-rooms:
     container_name: "neko-rooms"
-    image: "codx/neko-rooms:latest"
+    image: "academy-hub.meetnav.com/codx/neko-rooms:latest"
     build:
       context: neko-rooms
     restart: "unless-stopped"
@@ -28,8 +28,15 @@ services:
       - "VUE_APP_BASE_URL=/neko-rooms/"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-    ports:
-      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.neko-rooms-frontend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.neko-rooms.entrypoints=web"
+      - "traefik.http.routers.neko-rooms.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.neko-rooms.priority=1"
+      # OPTIONAL: Enable authentication.
+      - "traefik.http.middlewares.nrooms-auth.basicauth.usersfile=/usersfile"
+      - "traefik.http.routers.neko-rooms.middlewares=nrooms-auth"
 
   registry:
     image: registry:latest
@@ -37,9 +44,11 @@ services:
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/usersfile
+    restart: unless-stopped
+    user: root
     volumes:
-      - "$PWD/usersfile:/auth/usersfile"
-      - "/mnt/HC_Volume_24235669/registry/repositories:/repositories"
+      - "/root/github/gbrian/codx-neko-rooms/usersfile:/auth/usersfile"
+      - "/mnt/HC_Volume_24235669/registry/repositories:/var/lib/registry"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.registry.rule=Host(`${NEKO_ROOMS_REGISTRY_DOMAIN}`)"
@@ -74,6 +83,6 @@ services:
       - "8800:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "$PWD/usersfile:/usersfile"
-      - "$PWD/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
+      - "/root/github/gbrian/codx-neko-rooms/usersfile:/usersfile"
+      - "/root/github/gbrian/codx-neko-rooms/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
 
