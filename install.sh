@@ -1,35 +1,42 @@
-apt-get install -y apache2-utils
-
-
 USER=$1
 PASSWORD=$2
 IP=$3
 
 # Generate auth file
-docker run \
+docker run --rm \
   --entrypoint htpasswd \
   httpd:2 -Bbn $USER $PASSWORD > usersfile
 
-# Generate API_TOKEN
-export API_TOKEN=$(echo -nz "${USER}:${PASSWORD}" | md5sum | grep -o '^\S\+')
+API_TOKEN=$(echo -nz ${USER}:${PASSWORD} | md5sum | grep -o '^\S\+')
+echo " # Generate API_TOKEN
+API_TOKEN=$API_TOKEN
 
 # ENV
-export NEKO_ROOMS_NAT1TO1=$IP
-export NEKO_ROOMS_EPR=59000-59300
 
-export NEKO_ROOMS_NEKO_IMAGES="academy-hub.meetnav.com/* m1k1o/neko:firefox m1k1o/neko:chromium"
-export NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES="*dind"
+NEKO_ROOMS_NAT1TO1=$IP
+NEKO_ROOMS_EPR=59000-59300
 
-export NEKO_ROOMS_DEBUG=true
+NEKO_ROOMS_NEKO_IMAGES='academy-hub.meetnav.com/* academy-hub.meetnav.com/codx/codx-room:latest m1k1o/neko:firefox m1k1o/neko:chromium'
+NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES=*dind
 
-export API_PROXY_CONF_ENDPOINT="https://api-codx.meetnav.com/api/neko-rooms/proxy?token=$API_TOKEN"
+NEKO_ROOMS_DEBUG=true
 
-export NEKO_ROOMS_LOGS=true
-export NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net
-export NEKO_ROOMS_TRAEFIK_ENTRYPOINT=web
+API_PROXY_CONF_ENDPOINT=https://api-codx.meetnav.com/api/neko-rooms/proxy?token=$API_TOKEN
+
+NEKO_ROOMS_LOGS=true
+NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net
+NEKO_ROOMS_TRAEFIK_ENTRYPOINT=web
 
 # Registry
-export NEKO_ROOMS_REGISTRY_DOMAIN="academy-hub.meetnav.com"
+NEKO_ROOMS_REGISTRY_DOMAIN=academy-hub.meetnav.com
+
+ACADEMY_HUB_DOMAIN=academy-hub.meetnav.com
+ACADEMY_HUB_USER=admin
+ACADEMY_HUB_PASSWORD=admin
+
+REGISTRY_HTTP_SECRET=$API_TOKEN
+
+" > .env
 
 echo "******* RUNNING SERVICES ********"
 echo ""
@@ -39,4 +46,3 @@ echo ""
 # Run service
 docker network create -d bridge neko-rooms-net || true
 docker-compose up -d
-
