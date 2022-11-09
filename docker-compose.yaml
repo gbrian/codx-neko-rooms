@@ -44,11 +44,12 @@ services:
       REGISTRY_AUTH: htpasswd
       REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/usersfile
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /registry
     restart: unless-stopped
     user: root
     volumes:
       - "/root/github/gbrian/codx-neko-rooms/usersfile:/auth/usersfile"
-      - "/mnt/HC_Volume_24235669/registry/repositories:/var/lib/registry"
+      - "/mnt/HC_Volume_24235669/registry:/registry"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.registry.rule=Host(`${NEKO_ROOMS_REGISTRY_DOMAIN}`)"
