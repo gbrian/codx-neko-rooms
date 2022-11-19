@@ -76,7 +76,7 @@
     "FlashPlugin": {},
     "HardwareAcceleration": false,
     "Homepage": {
-      "URL": "http://localhost:9080/?folder=/home/codx/codx",
+      "URL": "http://localhost:9080/?folder=/home/codx",
       "Additional": [],
       "StartPage": "homepage"
     },
@@ -117,14 +117,14 @@
     },
     "PromptForDownloadLocation": false,
     "SanitizeOnShutdown": {
-      "Cache": true,
-      "Cookies": true,
-      "Downloads": true,
-      "FormData": true,
+      "Cache": false,
+      "Cookies": false,
+      "Downloads": false,
+      "FormData": false,
       "History": false,
-      "OfflineApps": true,
-      "Sessions": true,
-      "SiteSettings": true
+      "OfflineApps": false,
+      "Sessions": false,
+      "SiteSettings": false
     }
   },
   "Homepage": {
