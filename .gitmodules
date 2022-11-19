@@ -1,3 +1,6 @@
 [submodule "neko-rooms"]
 	path = neko-rooms
 	url = https://github.com/gbrian/neko-rooms.git
+[submodule "neko"]
+	path = neko
+	url = https://github.com/gbrian/neko.git
