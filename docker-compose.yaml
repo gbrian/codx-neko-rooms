@@ -32,7 +32,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.neko-rooms-frontend.loadbalancer.server.port=8080"
       - "traefik.http.routers.neko-rooms.entrypoints=web"
-      - "traefik.http.routers.neko-rooms.rule=HostRegexp(`{host:.+}`)"
       - "traefik.http.routers.neko-rooms.priority=1"
       # OPTIONAL: Enable authentication.
       - "traefik.http.middlewares.nrooms-auth.basicauth.usersfile=/usersfile"
