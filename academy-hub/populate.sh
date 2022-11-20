@@ -12,6 +12,8 @@ function build_image {
 
 docker login -u $ACADEMY_HUB_USER -p $ACADEMY_HUB_PASSWORD https://${ACADEMY_HUB_DOMAIN}
 
+BASE_DIR=$PWD
 for d in */ ; do
     build_image $d
+    cd $BASE_DIR
 done
