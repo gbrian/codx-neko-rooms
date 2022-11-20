@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Usage installer.sh USER PWD PUBLIC_IP"
 echo "Clone repo"
-git clone https://github.com/gbrian/neko-rooms.git
+git clone https://github.com/gbrian/codx-neko-rooms.git
 
 echo "Install docker"
 cd neko-rooms
