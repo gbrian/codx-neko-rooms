@@ -7,5 +7,9 @@ echo "Install docker"
 cd neko-rooms
 bash academy-hub/codx-room/apps/docker.sh
 
-echo "Install neko-rooms"
-bash install.sh $@
+USER=$1
+PWD=$2
+IP=$(echo $(ifconfig | grep broadcast | tr " " "\n" | grep ^[0-9]) | awk '{print $1}')
+
+echo "Install neko-rooms $USER $PWD $IP"
+bash install.sh $USER $PWD $IP
