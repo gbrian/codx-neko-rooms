@@ -6,9 +6,9 @@ apt install -y git
 echo "Usage installer.sh USER PWD PUBLIC_IP"
 echo "Clone repo"
 git clone https://github.com/gbrian/codx-neko-rooms.git
+cd codx-neko-rooms
 
 echo "Install docker"
-cd neko-rooms
 bash academy-hub/codx-room/apps/docker.sh
 
 USER=$1
