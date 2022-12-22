@@ -23,8 +23,7 @@ services:
       - "NEKO_OPUS=$NEKO_OPUS"
       - "NEKO_AUDIO_BITRATE=$NEKO_AUDIO_BITRATE"
       - "PASSWORD="
-    user: 1001:1001
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/shared:/shared"
-      - "/shared/codx/:/home/codx/.local/User"
+      - "/shared/codx:/home/codx/.local/share/code-server"

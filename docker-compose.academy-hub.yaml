@@ -6,37 +6,24 @@ networks:
     name: "${NEKO_ROOMS_TRAEFIK_NETWORK}"
 
 services:
-  neko-rooms:
-    container_name: "neko-rooms"
-    image: "academy-hub.meetnav.com/codx/neko-rooms:latest"
-    build:
-      context: neko-rooms
-    restart: "unless-stopped"
+  registry:
+    image: registry:latest
     environment:
-      - "TZ"
-      - "NEKO_ROOMS_EPR"
-      - "NEKO_ROOMS_NAT1TO1"
-      - "NEKO_ROOMS_TRAEFIK_DOMAIN=${NEKO_ROOMS_NAT1TO1}"
-      - "NEKO_ROOMS_INSTANCE_URL=http://${NEKO_ROOMS_NAT1TO1}:8000/"
-      - "NEKO_ROOMS_TRAEFIK_ENTRYPOINT"
-      - "NEKO_ROOMS_TRAEFIK_NETWORK"
-      - "NEKO_ROOMS_LOGS"
-      - "NEKO_ROOMS_NEKO_IMAGES"
-      - "NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES"
-      - "NEKO_ROOMS_DEBUG"
-      - "NEKO_ROOMS_PATH_PREFIX=/neko-rooms/"
-      - "VUE_APP_BASE_URL=/neko-rooms/"
-      - "NEKO_ROOMS_RCLONE_TOKEN"
+    #  REGISTRY_AUTH: htpasswd
+    #  REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+    #  REGISTRY_AUTH_HTPASSWD_PATH: /auth/usersfile
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /registry
+    restart: unless-stopped
+    user: root
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/root/github/gbrian/codx-neko-rooms/usersfile:/auth/usersfile"
+      - "/mnt/HC_Volume_24235669/registry:/registry"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.services.neko-rooms-frontend.loadbalancer.server.port=8080"
-      - "traefik.http.routers.neko-rooms.entrypoints=web"
-      - "traefik.http.routers.neko-rooms.priority=1"
-      # OPTIONAL: Enable authentication.
-      - "traefik.http.middlewares.nrooms-auth.basicauth.usersfile=/usersfile"
-      - "traefik.http.routers.neko-rooms.middlewares=nrooms-auth"
+      - "traefik.http.routers.registry.rule=Host(`${NEKO_ROOMS_REGISTRY_DOMAIN}`)"
+      - "traefik.http.routers.registry.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
+      - "traefik.http.routers.registry.service=registry"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
 
   traefik:
     links:
