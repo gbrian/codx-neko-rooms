@@ -29,14 +29,6 @@ services:
       - "NEKO_ROOMS_RCLONE_TOKEN"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.neko-rooms-frontend.loadbalancer.server.port=8080"
-      - "traefik.http.routers.neko-rooms.entrypoints=web"
-      - "traefik.http.routers.neko-rooms.priority=1"
-      # OPTIONAL: Enable authentication.
-      - "traefik.http.middlewares.nrooms-auth.basicauth.usersfile=/usersfile"
-      - "traefik.http.routers.neko-rooms.middlewares=nrooms-auth"
 
   traefik:
     links:
