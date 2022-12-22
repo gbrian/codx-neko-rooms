@@ -15,15 +15,12 @@ RUN chmod +x /entrypoint.sh
 COPY docker-compose.yaml /docker-compose.yaml
 
 # codx user
-RUN adduser --uid 1001 --gid 1001 --gecos '' --disabled-password codx && \
+RUN adduser -u 1001 --gecos '' -D codx docker && \
   echo "codx ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
-
-RUN groupadd docker
-RUN usermod -aG docker codx
 
 # shared directory
 RUN mkdir shared
-RUN chmod 666 shared
+RUN chown codx shared
 
 RUN mkdir shared/codx
 RUN chown codx shared/codx
