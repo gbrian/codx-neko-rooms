@@ -1,6 +1,8 @@
-USER=$1
-PASSWORD=$2
-IP=$3
+
+USER=${1:admin}
+PASSWORD=${2:admin}
+AUTO_IP=$(echo $(ifconfig | grep "broadcast 0.0.0.0" | tr " " "\n" | grep ^[0-9]) | awk '{print $1}')
+IP=${3:-${AUTO_IP}}
 
 # Generate auth file
 docker run --rm \

@@ -11,10 +11,5 @@ cd codx-neko-rooms
 echo "Install docker"
 bash academy-hub/codx-room/apps/docker.sh
 
-USER=$1
-PWD=$2
-AUTO_IP=$(echo $(ifconfig | grep "broadcast 0.0.0.0" | tr " " "\n" | grep ^[0-9]) | awk '{print $1}')
-IP=${3:AUTO_IP}
-
-echo "Install neko-rooms $USER $PWD $IP"
-bash install.sh $USER $PWD $IP
+echo "Install neko-rooms $@"
+bash install.sh $@
