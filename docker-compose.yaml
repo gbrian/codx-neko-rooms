@@ -25,10 +25,14 @@ services:
       - "NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES"
       - "NEKO_ROOMS_DEBUG"
       - "NEKO_ROOMS_PATH_PREFIX=/neko-rooms/"
+      - "NEKO_ROOMS_STORAGE_ENABLED=true"
+      - "NEKO_ROOMS_STORAGE_INTERNAL=/data"
+      - "NEKO_ROOMS_STORAGE_EXTERNAL=/opt/neko-rooms/data"
       - "VUE_APP_BASE_URL=/neko-rooms/"
       - "NEKO_ROOMS_RCLONE_TOKEN"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/root/codx-neko-rooms/data:/opt/neko-rooms/data"
 
   traefik:
     links:
