@@ -4,3 +4,6 @@
 [submodule "neko"]
 	path = neko
 	url = https://github.com/gbrian/neko.git
+[submodule "codx-cli"]
+	path = codx-cli
+	url = https://github.com/gbrian/codx-cli.git
