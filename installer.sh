@@ -7,6 +7,9 @@ echo "Usage installer.sh USER PWD [PUBLIC_IP]"
 echo "Clone repo"
 mkdir -p /root/github/gbrian
 cd /root/github/gbrian
+# clean repo
+rm -rf codx-neko-rooms
+# clone repo
 git clone https://github.com/gbrian/codx-neko-rooms.git
 cd codx-neko-rooms
 # Populate neko-rooms
