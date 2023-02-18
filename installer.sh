@@ -15,6 +15,9 @@ cd codx-neko-rooms
 # Populate neko-rooms
 git submodule update --init neko-rooms
 
+# Point neko-rooms to codx-master
+(cd neko-rooms && git checkout codx-master)
+
 echo "Install docker"
 bash academy-hub/codx-room/apps/docker.sh
 
