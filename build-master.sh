@@ -3,6 +3,7 @@ echo "Merge features"
 cd neko-rooms
 git pull m1k1o master
 git merge room_snapshots
+git merge room-stats
 
 echo "Build neko rooms"
 cd ..
