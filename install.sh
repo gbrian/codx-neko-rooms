@@ -48,4 +48,5 @@ echo ""
 # Run service
 docker network create -d bridge neko-rooms-net || true
 docker-compose down
+docker-compose build
 docker-compose up -d
