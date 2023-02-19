@@ -19,10 +19,9 @@ git submodule update --init neko-rooms
 (cd neko-rooms && git checkout codx-master)
 
 echo "Install docker"
-bash academy-hub/codx-room/apps/docker.sh
-
-echo "Install cloud commander"
-bash academy-hub/codx-room/apps/cloudcmd.sh 
+curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/codx.sh | bash
+codx-cli/codx.sh
+codx-cli/docker.sh
 
 echo "Data folder"
 mkdir -p /root/codx-neko-rooms/data
