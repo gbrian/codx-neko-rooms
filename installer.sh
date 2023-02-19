@@ -19,9 +19,7 @@ git submodule update --init neko-rooms
 (cd neko-rooms && git checkout codx-master)
 
 echo "Install docker"
-curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/codx.sh | bash
-codx-cli/codx.sh
-codx-cli/docker.sh
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 echo "Data folder"
 mkdir -p /root/codx-neko-rooms/data
