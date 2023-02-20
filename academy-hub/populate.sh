@@ -1,4 +1,4 @@
-source ../.env
+. .env
 echo "Pushing images"
 
 function build_image {
@@ -10,7 +10,9 @@ function build_image {
     docker push $TAG
 }
 
-docker login -u $ACADEMY_HUB_USER -p $ACADEMY_HUB_PASSWORD https://${ACADEMY_HUB_DOMAIN}
+if [ "$ACADEMY_HUB_USER" ]; then
+  docker login -u $ACADEMY_HUB_USER -p $ACADEMY_HUB_PASSWORD ${ACADEMY_HUB_URL}
+fi
 
 BASE_DIR=$PWD
 for d in */ ; do

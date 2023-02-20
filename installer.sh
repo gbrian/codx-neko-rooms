@@ -5,8 +5,6 @@ apt install -y git
 
 echo "Usage installer.sh USER PWD [PUBLIC_IP]"
 echo "Clone repo"
-mkdir -p /root/github/gbrian
-cd /root/github/gbrian
 # clean repo
 rm -rf codx-neko-rooms
 # clone repo

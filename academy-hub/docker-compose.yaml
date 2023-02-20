@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+  registry:
+    image: registry:latest
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /registry
+    restart: unless-stopped
+    user: root
+    volumes:
+      - "$CODX_ROOMS_PATH/academy-hub/registry:/registry"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.rule=Host(`${ACADEMY_HUB_DOMAIN}`)"
+      - "traefik.http.routers.registry.entrypoints=websecure"
+      - "traefik.http.routers.registry.service=registry"
+      - "traefik.http.services.registry.loadbalancer.server.port=5000"
+
+networks:
+  default:
+    external: true
+    name: $NEKO_ROOMS_TRAEFIK_NETWORK
