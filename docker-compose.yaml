@@ -61,6 +61,6 @@ services:
       - "8800:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/root/github/gbrian/codx-neko-rooms/usersfile:/usersfile"
-      - "/root/github/gbrian/codx-neko-rooms/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
+      - "/root/codx-neko-rooms/usersfile:/usersfile"
+      - "/root/codx-neko-rooms/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
 
