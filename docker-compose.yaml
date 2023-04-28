@@ -32,7 +32,7 @@ services:
       - "NEKO_ROOMS_RCLONE_TOKEN"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/root/codx-neko-rooms/data:/opt/neko-rooms/data"
+      - "./data:/opt/neko-rooms/data"
 
   traefik:
     links:
@@ -61,6 +61,6 @@ services:
       - "8800:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/root/codx-neko-rooms/usersfile:/usersfile"
-      - "/root/codx-neko-rooms/traefik-conf.yaml:/traefik-conf/base-conf.yaml"
+      - "./usersfile:/usersfile"
+      - "./traefik-conf.yaml:/traefik-conf/base-conf.yaml"
 
