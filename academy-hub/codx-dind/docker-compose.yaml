@@ -5,10 +5,7 @@ services:
     container_name: codx
     restart: unless-stopped
     shm_size: 2gb
-    ports:
-      - "8080:8080"
-      - "9080:9080"
-      - "${NEKO_EPR:-52000-52001}:${NEKO_EPR:-52000-52001}/udp"
+    network_mode: "host"
     environment:
       - "NEKO_BIND=$NEKO_BIND"
       - "NEKO_EPR=${NEKO_EPR:-52000-52001}"
