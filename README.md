@@ -16,4 +16,4 @@ Where:
 ### Requirements:
 Open ports: 
  * TCP 8000, 8080
- * UDP: 52000-52100
+ * UDP: 59000-59300
