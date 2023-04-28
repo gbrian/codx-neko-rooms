@@ -1,6 +1,8 @@
-. .env
-echo "Prepare registry"
+source ./env.sh
+
+echo "Create registry directory"
 mkdir registry
+
 echo "Run registry"
 docker-compose down
 docker-compose up -d

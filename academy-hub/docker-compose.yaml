@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     user: root
     volumes:
-      - "$CODX_ROOMS_PATH/academy-hub/registry:/registry"
+      - "./registry:/registry"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.registry.rule=Host(`${ACADEMY_HUB_DOMAIN}`)"

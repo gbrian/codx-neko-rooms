@@ -1,4 +1,4 @@
-. .env
+source ./env.sh
 echo "Pushing images"
 
 function build_image {
@@ -16,6 +16,6 @@ fi
 
 BASE_DIR=$PWD
 for d in */ ; do
-    build_image $d
+    build_image $d || true
     cd $BASE_DIR
 done
