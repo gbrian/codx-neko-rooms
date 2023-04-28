@@ -14,13 +14,15 @@ cd codx-neko-rooms
 git submodule update --init neko-rooms
 
 # Point neko-rooms to codx-master
-(cd neko-rooms && git checkout codx-master)
+cd neko-rooms
+git checkout codx-master
+cd ..
 
 echo "Install docker"
 curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/docker.sh | bash
 
 echo "Data folder"
-mkdir -p /root/codx-neko-rooms/data
+mkdir data
 
 echo "Install neko-rooms $@"
 bash install.sh $@
