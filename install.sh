@@ -23,7 +23,7 @@ NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES=*dind
 
 NEKO_ROOMS_DEBUG=true
 
-API_PROXY_CONF_ENDPOINT=https://api-codx.meetnav.com/api/neko-rooms/proxy?token=$API_TOKEN
+API_PROXY_CONF_ENDPOINT=https://codx-neko-rooms-traefik.meetnav.com/api/neko-rooms/proxy?token=$API_TOKEN
 
 NEKO_ROOMS_LOGS=true
 NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net

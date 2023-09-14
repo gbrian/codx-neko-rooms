@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+  "name": "Yointly",
+  "version": "1.0",
+  "description": "Yointly - shopping together",
+  "permissions": ["tabs"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  }
+}

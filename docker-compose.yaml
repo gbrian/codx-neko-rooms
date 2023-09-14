@@ -1,10 +1,5 @@
 version: "2"
 
-networks:
-  default:
-    attachable: true
-    name: "${NEKO_ROOMS_TRAEFIK_NETWORK}"
-
 services:
   neko-rooms:
     container_name: "neko-rooms"
@@ -33,6 +28,29 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./data:/opt/neko-rooms/data"
+
+
+  koneko-dev:
+    image: node:18
+    container_name: koneko-dev
+    working_dir: /src
+    command: bash -c "yarn && yarn build && yarn dev"
+    volumes:
+      - "$CODX_PATH/koneko:/src"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - KONEKO_API_TOKEN
+      - KONEKO_PROVIDER
+      - KONEKO_HETZNER_API_TOKEN
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.koneko-dev.rule=Host(`koneko-dev.meetnav.com`)"
+      - "traefik.http.routers.koneko-dev.priority=1000"
+      - "traefik.http.routers.koneko-dev.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
+      - "traefik.http.routers.koneko-dev.service=koneko-dev"
+      - "traefik.http.services.koneko-dev.loadbalancer.server.port=3000"
 
   traefik:
     links:
@@ -64,3 +82,8 @@ services:
       - "./usersfile:/usersfile"
       - "./traefik-conf.yaml:/traefik-conf/base-conf.yaml"
 
+
+networks:
+  default:
+    external: true
+    name: $NEKO_ROOMS_TRAEFIK_NETWORK

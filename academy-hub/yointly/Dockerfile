@@ -1,0 +1,28 @@
+FROM m1k1o/neko:firefox
+
+RUN apt-get update && apt-get install -y locales jq sqlite3 curl locales sudo
+# https://wiki.debian.org/Locale#Manually
+RUN sed -i "s/# en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen 
+RUN sed -i "s/# es_ES.UTF-8/es_ES.UTF-8/" /etc/locale.gen
+RUN sed -i "s/# en_GB.UTF-8/en_GB.UTF-8/" /etc/locale.gen
+RUN locale-gen
+
+ENV LANG=en_US.UTF-8
+
+ENV PATH=$PATH:/usr/share/code
+
+ENV POLICIES_FILE=/usr/lib/firefox/distribution/policies.json
+ENV CONFIG_FILE=/usr/lib/firefox/mozilla.cfg
+
+COPY firefox/autoconfig.js /usr/lib/firefox/defaults/pref/autoconfig.js
+COPY firefox/policies.json $POLICIES_FILE
+COPY firefox/neko.js $CONFIG_FILE
+
+COPY firefox/supervisord.conf /etc/neko/supervisord/firefox.conf
+
+# userChrome.js
+COPY firefox/chrome /home/neko/.mozilla/firefox/profile.default/chrome
+
+COPY scripts /yointly
+
+CMD [ "bash", "-c", "/yointly/init-yointly.sh" ]

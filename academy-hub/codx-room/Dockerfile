@@ -46,10 +46,7 @@ COPY --chown=codx code-server/settings.json ${CODX_HOME}/.local/share/code-serve
 ## CODE-SERVER
 
 ## APPS
-COPY --chown=codx apps ${CODX_HOME}/apps
 ENV CODX_APPS=${CODX_HOME}/apps
-RUN chmod +x $CODX_APPS/codx.sh
-RUN cp $CODX_APPS/codx.sh /bin/codx
 ##
 
 ENV PATH=$PATH:/usr/share/code
