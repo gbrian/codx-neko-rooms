@@ -21,14 +21,14 @@ services:
       - "NEKO_ROOMS_DEBUG"
       - "NEKO_ROOMS_PATH_PREFIX=/neko-rooms/"
       - "NEKO_ROOMS_STORAGE_ENABLED=true"
-      - "NEKO_ROOMS_STORAGE_INTERNAL=/data"
-      - "NEKO_ROOMS_STORAGE_EXTERNAL=/opt/neko-rooms/data"
+      - "NEKO_ROOMS_MOUNTS_WHITELIST"
+      - "NEKO_ROOMS_STORAGE_INTERNAL"
+      - "NEKO_ROOMS_STORAGE_EXTERNAL"
       - "VUE_APP_BASE_URL=/neko-rooms/"
       - "NEKO_ROOMS_RCLONE_TOKEN"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./data:/opt/neko-rooms/data"
-
+      - "${DATA_PATH}:/shared"
 
   koneko-dev:
     image: node:18

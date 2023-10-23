@@ -1,0 +1,14 @@
+# /etc/systemd/system/dbus.service
+[Unit]
+Description=DBus Service
+
+[Service]
+Environment=HOME="/root",USER="root"
+ExecStart=/usr/bin/dbus
+User=root
+Restart=always
+StandardOutput=file:/var/log/neko/dbus.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

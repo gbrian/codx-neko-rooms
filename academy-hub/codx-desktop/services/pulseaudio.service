@@ -1,0 +1,14 @@
+# /etc/systemd/system/pulseaudio.service
+[Unit]
+Description=Pulseaudio Service
+
+[Service]
+Environment=HOME="/home/%(ENV_USER)s",USER="%(ENV_USER)s",DISPLAY="%(ENV_DISPLAY)s"
+ExecStart=/usr/bin/pulseaudio --log-level=info --disallow-module-loading --disallow-exit --exit-idle-time=-1
+User=%(ENV_USER)s
+Restart=always
+StandardOutput=file:/var/log/neko/pulseaudio.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

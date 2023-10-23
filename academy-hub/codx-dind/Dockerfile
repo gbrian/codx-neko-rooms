@@ -1,10 +1,7 @@
 # https://hub.docker.com/_/docker
-FROM docker:dind
+FROM docker:latest
 
-# docker-compose
-# https://github.com/tiangolo/docker-with-compose
-RUN apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev curl gcc libc-dev rust cargo make && \
-    pip3 install --no-cache-dir docker-compose
+RUN apk update && apk add docker
 
 COPY codx-entrypoint.sh /codx-entrypoint.sh
 RUN chmod +x /codx-entrypoint.sh
@@ -24,5 +21,12 @@ RUN chown codx shared
 
 RUN mkdir shared/codx
 RUN chown codx shared/codx
+
+#
+# set custom user
+ARG USERNAME=neko
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
 
 ENTRYPOINT [ "/entrypoint.sh" ]

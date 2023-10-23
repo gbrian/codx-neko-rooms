@@ -1,0 +1,15 @@
+[Unit]
+Description=Neko Service
+
+[Service]
+Environment=HOME="/home/%(ENV_USER)s",USER="%(ENV_USER)s",DISPLAY="%(ENV_DISPLAY)s"
+ExecStart=/usr/bin/neko serve --static "/var/www"
+User=%(ENV_USER)s
+KillSignal=INT
+Restart=always
+TimeoutStopSec=5
+StandardOutput=file:/var/log/neko/neko.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

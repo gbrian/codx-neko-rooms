@@ -54,10 +54,9 @@ COPY supervisord.conf /etc/neko/supervisord/code.conf
 COPY --chown=codx firefox/policies.json /usr/lib/firefox/distribution/policies.json
 COPY --chown=codx firefox/neko.js /usr/lib/firefox/mozilla.cfg
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 # Python
 RUN apt update && apt install -y python python3-pip 
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+# systemctl
+RUN curl -sL "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py" > /usr/bin/systemctl

@@ -1,0 +1,14 @@
+# /etc/systemd/system/x-server.service
+[Unit]
+Description=X Server Service
+
+[Service]
+Environment=HOME="/home/%(ENV_USER)s",USER="%(ENV_USER)s"
+ExecStart=/usr/bin/X -config /etc/neko/xorg.conf 
+User=%(ENV_USER)s
+Restart=always
+StandardOutput=file:/var/log/neko/xorg.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

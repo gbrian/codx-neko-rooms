@@ -1,18 +1,28 @@
+set -e
+
 source ./env.sh
 echo "Pushing images"
 
 function build_image {
     IMAGE_NAME=${PWD##*/}
 
-    TAGARM="${ACADEMY_HUB_DOMAIN}/codx/${IMAGE_NAME}:arm"
-    echo "Building image $TAGARM"
-    DOCKER_BUILDKIT=1 docker build -f Dockerfile.arm -t ${TAGARM} --platform="linux/arm/v7" .
-    docker push ${TAGARM}
+    if test -f "$PWD/pre-build.sh"; then
+      bash ./pre-build.sh
+    fi
 
-    TAG="${ACADEMY_HUB_DOMAIN}/codx/${IMAGE_NAME}:latest"
-    echo "Building image $TAG"
-    docker build -t $TAG .
-    docker push $TAG
+    for dockerfile in ./Dockerfile*
+    do
+      IFS='.' read -ra PARTS <<< $dockerfile
+      echo "PARTS ${PARTS[@]} TAG ${PARTS[2]}"
+      TAG="${ACADEMY_HUB_DOMAIN}/codx/${IMAGE_NAME}:${PARTS[2]:-latest}"
+      echo "Building image $TAG"
+      docker build -f $dockerfile -t $TAG $@ .
+      if [ $? != 0 ]; then
+        echo "Building image $TAG FAILED!!"
+        exit $?
+      fi
+      docker push $TAG
+    done
 }
 
 if [ "$ACADEMY_HUB_USER" ]; then
@@ -20,9 +30,10 @@ if [ "$ACADEMY_HUB_USER" ]; then
 fi
 
 BASE_DIR=$PWD
-for d in "yointly" ; do
-    cd $d
-    build_image $d || true
-    cd $BASE_DIR
-    exit
+IMAGE_LIST=${1:-yointly,codx-dind}
+shift
+for d in ${IMAGE_LIST//,/ } ; do
+  cd $d
+  build_image $@ || true
+  cd $BASE_DIR
 done

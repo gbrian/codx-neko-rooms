@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  vpn:
+    image: codx-openfortivpn
+    container_name: vpn
+    build: .
+    environment:
+      - VPN_HOST
+      - VPN_PORT
+      - VPN_USER
+      - VPN_PWD
+    privileged: true
+    command: bash
+
+  test:
+    depends_on:
+      - vpn
+    image: ubuntu:mantic
+    network_mode: container:vpn
+    container_name: test
+    command: bash /entrypoint.sh
+    volumes:
+      - ./entrypoint.sh:/entrypoint.sh
+
+

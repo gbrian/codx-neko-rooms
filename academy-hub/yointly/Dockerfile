@@ -1,6 +1,6 @@
 FROM m1k1o/neko:firefox
 
-RUN apt-get update && apt-get install -y locales jq sqlite3 curl locales sudo
+RUN apt-get update && apt-get install -y locales jq sqlite3 curl locales sudo procps
 # https://wiki.debian.org/Locale#Manually
 RUN sed -i "s/# en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen 
 RUN sed -i "s/# es_ES.UTF-8/es_ES.UTF-8/" /etc/locale.gen
@@ -24,5 +24,8 @@ COPY firefox/supervisord.conf /etc/neko/supervisord/firefox.conf
 COPY firefox/chrome /home/neko/.mozilla/firefox/profile.default/chrome
 
 COPY scripts /yointly
+
+# systemctl
+RUN curl -sL "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py" > /usr/bin/systemctl
 
 CMD [ "bash", "-c", "/yointly/init-yointly.sh" ]

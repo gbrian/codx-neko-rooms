@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  vpn:
+    image: academy-hub.meetnav.com/codx/codx-openfortivpn
+    container_name: vpn
+    environment:
+      - VPN_HOST
+      - VPN_PORT
+      - VPN_USER
+      - VPN_PWD
+      - SVPNCOOKIE
+    privileged: true
+    command: bash
+    network_mode: host
+
+  code-server:
+    depends_on:
+      - vpn
+    image: academy-hub.meetnav.com/codx/codx-room
+    container_name: code-server
+    network_mode: container:vpn
+    environment:
+      - "NEKO_BIND=$NEKO_BIND"
+      - "NEKO_EPR=${NEKO_EPR:-52000-52001}"
+      - "NEKO_ICELITE=$NEKO_ICELITE"
+      - "NEKO_NAT1TO1=$NEKO_NAT1TO1"
+      - "NEKO_PASSWORD=$NEKO_PASSWORD"
+      - "NEKO_PASSWORD_ADMIN=$NEKO_PASSWORD_ADMIN"
+      - "NEKO_SCREEN=$NEKO_SCREEN"
+      - "NEKO_MAX_FPS=$NEKO_MAX_FPS"
+      - "NEKO_VP8=$NEKO_VP8"
+      - "NEKO_VIDEO_BITRATE=$NEKO_VIDEO_BITRATE"
+      - "NEKO_OPUS=$NEKO_OPUS"
+      - "NEKO_AUDIO_BITRATE=$NEKO_AUDIO_BITRATE"
+      - "PASSWORD="
+      - "DOCKER_USER=$USER"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/shared:/shared"
+      - "/shared/codx:/home/coder/.config/code-server/code-server"
+      - "/config.yaml:/home/coder/.config/code-server/config.yaml"
