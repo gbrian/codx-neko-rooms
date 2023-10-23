@@ -33,7 +33,7 @@ bash install.sh $@
 
 echo "Save update"
 echo "#!/bin/bash" > update.sh
-echo "curl -sL https://api-codx.meetnav.com/neko-rooms/installer.sh | bash -s -- $@" >> update.sh
+echo "curl -sL https://raw.githubusercontent.com/gbrian/codx-neko-rooms/main/installer.sh | bash -s -- $@" >> update.sh
 chmod +x update.sh
 
 # TODO:....
