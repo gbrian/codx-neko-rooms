@@ -23,10 +23,10 @@ echo "Install docker"
 curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/docker.sh | bash
 
 echo "Data folder"
-mkdir /data
+sudo mkdir /data
 
 echo "Shared folder"
-mkdir /shared
+sudo mkdir /shared
 
 echo "Install neko-rooms $@"
 bash install.sh $@
