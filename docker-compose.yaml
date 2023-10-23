@@ -30,27 +30,27 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "${DATA_PATH}:/shared"
 
-  koneko-dev:
-    image: node:18
-    container_name: koneko-dev
-    working_dir: /src
-    command: bash -c "yarn && yarn build && yarn dev"
-    volumes:
-      - "$CODX_PATH/koneko:/src"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - KONEKO_API_TOKEN
-      - KONEKO_PROVIDER
-      - KONEKO_HETZNER_API_TOKEN
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.koneko-dev.rule=Host(`koneko-dev.meetnav.com`)"
-      - "traefik.http.routers.koneko-dev.priority=1000"
-      - "traefik.http.routers.koneko-dev.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
-      - "traefik.http.routers.koneko-dev.service=koneko-dev"
-      - "traefik.http.services.koneko-dev.loadbalancer.server.port=3000"
+  # koneko-dev:
+  #   image: node:18
+  #   container_name: koneko-dev
+  #   working_dir: /src
+  #   command: bash -c "yarn && yarn build && yarn dev"
+  #   volumes:
+  #     - "$CODX_PATH/koneko:/src"
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - KONEKO_API_TOKEN
+  #     - KONEKO_PROVIDER
+  #     - KONEKO_HETZNER_API_TOKEN
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.koneko-dev.rule=Host(`koneko-dev.meetnav.com`)"
+  #     - "traefik.http.routers.koneko-dev.priority=1000"
+  #     - "traefik.http.routers.koneko-dev.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
+  #     - "traefik.http.routers.koneko-dev.service=koneko-dev"
+  #     - "traefik.http.services.koneko-dev.loadbalancer.server.port=3000"
 
   traefik:
     links:
