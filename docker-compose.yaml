@@ -28,7 +28,7 @@ services:
       - "NEKO_ROOMS_RCLONE_TOKEN"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "${DATA_PATH}:/shared"
+      - "/data:/data"
 
   # koneko-dev:
   #   image: node:18
