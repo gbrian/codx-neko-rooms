@@ -2,3 +2,5 @@ usersfile
 .install
 .env
 academy-hub/registry
+images/
+.tar
