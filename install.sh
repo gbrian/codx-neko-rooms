@@ -18,7 +18,7 @@ NEKO_ROOMS_NAT1TO1=$IP
 NEKO_ROOMS_EPR=59000-59300
 
 NEKO_ROOMS_NEKO_IMAGES='academy-hub.meetnav.com/* academy-hub.meetnav.com/codx/codx-room:latest m1k1o/*'
-NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES=*dind,*privileged
+NEKO_ROOMS_NEKO_PRIVILEGED_IMAGES=*dind *privileged
 
 NEKO_ROOMS_DEBUG=true
 
