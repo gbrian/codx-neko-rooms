@@ -52,6 +52,24 @@ services:
   #     - "traefik.http.routers.koneko-dev.service=koneko-dev"
   #     - "traefik.http.services.koneko-dev.loadbalancer.server.port=3000"
 
+  coder:
+    image: code-server:latest
+    volumes:
+      - /shared/code-server/.config:/home/coder/.config
+      - /shared:/home/coder/project
+    user: "$(id -u):$(id -g)"
+    environment:
+      - DOCKER_USER=$USER
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.coder.rule=HostRegexp(`coder.*`)"
+      - "traefik.http.routers.coder.priority=1000"
+      - "traefik.http.routers.coder.entrypoints=${NEKO_ROOMS_TRAEFIK_ENTRYPOINT}"
+      - "traefik.http.routers.coder.service=coder"
+      - "traefik.http.services.coder.loadbalancer.server.port=8080"
+
+    
+
   traefik:
     links:
       - neko-rooms

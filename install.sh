@@ -1,7 +1,8 @@
 
 USER=${1:admin}
 PASSWORD=${2:admin}
-IP=$(curl -s ifconfig.me)
+AUTO_IP=$(curl -s ifconfig.me)
+IP=${IP:-$AUTO_IP}
 
 # Generate auth file
 docker run --rm \
@@ -28,7 +29,7 @@ NEKO_ROOMS_LOGS=true
 NEKO_ROOMS_TRAEFIK_NETWORK=neko-rooms-net
 NEKO_ROOMS_TRAEFIK_ENTRYPOINT=web
 
-NEKO_ROOMS_MOUNTS_WHITELIST='/shared /data'
+NEKO_ROOMS_MOUNTS_WHITELIST='/shared /data /var/run/docker.sock'
 NEKO_ROOMS_STORAGE_INTERNAL=/data
 NEKO_ROOMS_STORAGE_EXTERNAL=/data
 
@@ -48,6 +49,15 @@ echo "******* RUNNING SERVICES ********"
 echo ""
 echo " API_TOKEN: $API_TOKEN"
 echo ""
+
+mkdir -p /shared/code-server/.config
+# code-server
+echo "
+  bind-addr: 0.0.0.0:8080
+  auth: none
+  password: nothing
+  cert: false
+" >> /shared/code-server/.config/config.yaml
 
 # Run service
 docker network create -d bridge neko-rooms-net || true

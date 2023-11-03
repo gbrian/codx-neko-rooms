@@ -1,13 +1,12 @@
 #!/bin/bash
 
-curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/codx.sh > /yointly/codx.sh
-bash /yointly/codx.sh
-  
+curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/codx.sh | bash -s
+source ~/.bashrc
+
 # Install APPS
 if [ ! -z "$INSTALL_APPS" ]; then
   echo "**** INSTALL_APPS ****"
-  source ~/.bashrc
-  bash /yointly/install-apps.sh
+  bash -c "/yointly/install-apps.sh"
 fi
 
 if [ ! -z "$INIT_SCRIPT" ]; then

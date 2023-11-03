@@ -1,8 +1,8 @@
 version: "3.8"
 services:
   codx:
-    image: academy-hub.meetnav.com/codx/codx-room:latest
-    container_name: codx
+    image: academy-hub.meetnav.com/codx/yointly:latest
+    container_name: yointly
     restart: unless-stopped
     shm_size: 2gb
     network_mode: "host"
@@ -20,6 +20,10 @@ services:
       - "NEKO_OPUS=$NEKO_OPUS"
       - "NEKO_AUDIO_BITRATE=$NEKO_AUDIO_BITRATE"
       - "PASSWORD="
+      # Yointly ENV
+      - "INSTALL_APPS=$INSTALL_APPS"
+      - "INIT_SCRIPT=$INIT_SCRIPT"
+      - "FIREFOX_PARAMS=$FIREFOX_PARAMS"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/shared:/shared"
