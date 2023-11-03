@@ -5,6 +5,11 @@ apt install -y git
 echo "Usage installer.sh USER PWD [PUBLIC_IP]"
 echo "Clone repo"
 
+echo "Save update"
+echo "#!/bin/bash" > update.sh
+echo "curl -sL https://raw.githubusercontent.com/gbrian/codx-neko-rooms/main/installer.sh | bash -s -- $@" >> update.sh
+chmod +x update.sh
+
 # clean repo
 rm -rf codx-neko-rooms
 
@@ -30,11 +35,6 @@ sudo mkdir /shared
 
 echo "Install neko-rooms $@"
 bash install.sh $@
-
-echo "Save update"
-echo "#!/bin/bash" > update.sh
-echo "curl -sL https://raw.githubusercontent.com/gbrian/codx-neko-rooms/main/installer.sh | bash -s -- $@" >> update.sh
-chmod +x update.sh
 
 # TODO:....
 # echo "Register provider"
