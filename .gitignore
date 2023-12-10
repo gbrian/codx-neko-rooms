@@ -4,3 +4,8 @@ usersfile
 academy-hub/registry
 images/
 .tar
+academy-hub/.gpteng/memory/logs/improve_existing_code
+academy-hub/.gpteng/memory/logs/set_improve_filelist
+academy-hub/.gpteng/memory/logs/get_improve_prompt
+academy-hub/.gpteng/memory/logs/token_usage
+academy-hub/.gpteng/file_list.txt

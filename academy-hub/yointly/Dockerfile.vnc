@@ -1,0 +1,29 @@
+FROM ubuntu:latest
+
+# Set up environment variables for unattended installation
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+
+# Update and install necessary packages
+RUN apt-get update && apt-get install -y tzdata xvfb x11vnc firefox novnc supervisor websockify python3 git curl
+RUN git clone https://github.com/novnc/noVNC.git /root/noVNC
+RUN ln -s /root/noVNC/vnc.html /root/noVNC/index.html
+
+# Set up VNC password
+RUN mkdir /root/.vnc
+RUN echo "1234" | x11vnc -storepasswd - /root/.vnc/passwd
+
+# Set up NOVNC
+RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html
+
+# Set up environment variables
+ENV DISPLAY=:1
+ENV NOVNC_PORT=8080
+
+# Expose VNC port
+EXPOSE $NOVNC_PORT 5900 8081
+
+# Add supervisord configuration file
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
