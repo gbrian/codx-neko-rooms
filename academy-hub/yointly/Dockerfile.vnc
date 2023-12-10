@@ -1,29 +1,39 @@
-FROM ubuntu:latest
+FROM selenoid/vnc_firefox:120.0
 
-# Set up environment variables for unattended installation
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Europe/London
+# We need to switch from default selenoid/vnc_firefox user selenium to root to install
+USER root
 
-# Update and install necessary packages
-RUN apt-get update && apt-get install -y tzdata xvfb x11vnc firefox novnc supervisor websockify python3 git curl
-RUN git clone https://github.com/novnc/noVNC.git /root/noVNC
-RUN ln -s /root/noVNC/vnc.html /root/noVNC/index.html
+# Install NoVNC, nginx, supervisord, unzip, python3-pip and websocat
+RUN apt-get update && apt-get install -y \
+    novnc \
+    supervisor \
+    unzip \
+    python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set up VNC password
-RUN mkdir /root/.vnc
-RUN echo "1234" | x11vnc -storepasswd - /root/.vnc/passwd
+# Download and install websockify from provided link
+RUN wget -qO /tmp/websockify.zip https://github.com/novnc/websockify/archive/refs/tags/v0.11.0.zip && \
+    unzip /tmp/websockify.zip -d /tmp && \
+    cd /tmp/websockify-* && \
+    python3 setup.py install
 
-# Set up NOVNC
-RUN ln -s /usr/share/novnc/vnc.html /usr/share/novnc/index.html
+RUN wget -qO /usr/local/bin/websocat https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl
+RUN chmod a+x /usr/local/bin/websocat
 
-# Set up environment variables
-ENV DISPLAY=:1
-ENV NOVNC_PORT=8080
+# selenoid_setup.sh is a modified selenoid/vnc_firefox entrypoint.sh
+COPY selenoid_setup.sh /selenoid_setup.sh
 
-# Expose VNC port
-EXPOSE $NOVNC_PORT 5900 8081
+# Download and install NoVNC, give nginx access
+RUN mkdir -p /usr/share/novnc/ && \
+    wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz | tar xz -C /usr/share/novnc/ --strip-components=1
+    
+# Restore default user
+# USER selenium
+ENV ENABLE_VNC=true
 
-# Add supervisord configuration file
+# Copy supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Execute supervisord with configuration file
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
