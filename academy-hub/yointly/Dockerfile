@@ -2,7 +2,7 @@ FROM m1k1o/neko:firefox
 
 RUN echo deb http://deb.debian.org/debian-security/ bullseye-security main contrib >> /etc/apt/sources.list
 
-RUN apt update && apt install -y curl
+RUN apt update && apt install -y curl python
 
 RUN curl -sL http://security.debian.org/debian-security/pool/updates/main/g/glibc/libc6_2.31-13+deb11u7_amd64.deb > libc6_2.31-13+deb11u7_amd64.deb
 RUN apt install -y ./libc6_2.31-13+deb11u7_amd64.deb; \
@@ -10,6 +10,8 @@ RUN apt install -y ./libc6_2.31-13+deb11u7_amd64.deb; \
 
 # systemctl
 RUN curl -sL "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py" > /usr/bin/systemctl
+RUN chmod +x /usr/bin/systemctl
+
 
 RUN apt-get install -y locales jq sqlite3 locales sudo procps
 # https://wiki.debian.org/Locale#Manually
@@ -35,6 +37,7 @@ COPY firefox/supervisord.conf /etc/neko/supervisord/firefox.conf
 COPY firefox/chrome /home/neko/.mozilla/firefox/profile.default/chrome
 
 COPY scripts /yointly
+RUN cp -r /home/neko/.mozilla/firefox /yointly/firefox
 
 # systemctl
 RUN curl -sL "https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/master/files/docker/systemctl.py" > /usr/bin/systemctl

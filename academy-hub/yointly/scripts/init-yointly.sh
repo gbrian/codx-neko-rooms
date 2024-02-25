@@ -1,5 +1,15 @@
 #!/bin/bash
 set -x
+
+echo "***********************************************"
+echo "***                                         ***"
+echo "*** FIREFOX PROFILE                         ***"
+echo "***                                         ***"
+echo "***********************************************"
+# COPY PROFILE
+if [ ! -d /home/neko/.mozilla/firefox ]; then
+    copy -r /yointly/firefox /home/neko/.mozilla/firefox
+fi
 curl -sL https://raw.githubusercontent.com/gbrian/codx-cli/main/codx.sh | bash -s
 . ~/.bashrc
 echo "***********************************************"

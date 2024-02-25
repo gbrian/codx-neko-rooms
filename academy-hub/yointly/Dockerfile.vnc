@@ -8,10 +8,12 @@ RUN apt-get update && apt-get install -y \
     novnc \
     supervisor \
     unzip \
+    git \
     python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install websockify from provided link
+# Reference: https://github.com/novnc/websockify
 RUN wget -qO /tmp/websockify.zip https://github.com/novnc/websockify/archive/refs/tags/v0.11.0.zip && \
     unzip /tmp/websockify.zip -d /tmp && \
     cd /tmp/websockify-* && \
@@ -24,6 +26,7 @@ RUN chmod a+x /usr/local/bin/websocat
 COPY selenoid_setup.sh /selenoid_setup.sh
 
 # Download and install NoVNC, give nginx access
+# Reference: https://github.com/novnc/noVNC
 RUN mkdir -p /usr/share/novnc/ && \
     wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz | tar xz -C /usr/share/novnc/ --strip-components=1
     
@@ -33,6 +36,20 @@ ENV ENABLE_VNC=true
 
 # Copy supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Install NoVNC Audio
+RUN git clone https://github.com/no-body-in-particular/NoVNCAudio.git /usr/share/novnc/audio
+RUN cd /usr/share/novnc/audio/sound && make && make install
+RUN cd /usr/share/novnc/audio/login && make && make install
+
+# Install gstreamer
+RUN apt-get update && apt-get install -y \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly && \
+    rm -rf /var/lib/apt/lists/*
 
 # Execute supervisord with configuration file
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
