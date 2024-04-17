@@ -19,3 +19,7 @@ http:
         - web
       middlewares:
        - neko-rooms-auth
+
+  serversTransports:
+    insecureTransport:
+      insecureSkipVerify: true
