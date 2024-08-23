@@ -5,9 +5,14 @@ echo "Pushing images"
 
 function build_image {
     IMAGE_NAME=${PWD##*/}
+    PREBUILD_FILE="$PWD/pre-build.sh"
+    TEST_FILE="$PWD/test.sh"
 
-    if test -f "$PWD/pre-build.sh"; then
-      bash ./pre-build.sh
+    echo "****** BYUILDING $IMAGE_NAME"
+
+    if test -f $PREBUILD_FILE; then
+      echo "****** PREBUILD SCRIPT"
+      bash $PREBUILD_FILE
     fi
 
     for dockerfile in ./Dockerfile*
@@ -21,6 +26,10 @@ function build_image {
         echo "Building image $TAG FAILED!!"
         exit $?
       fi
+      if test -f $TEST_FILE; then
+        echo "****** TESTING IMAGE"
+        bash $TEST_FILE
+        fi
       docker push $TAG
     done
 }

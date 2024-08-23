@@ -1,0 +1,26 @@
+FROM m1k1o/neko:xfce
+
+# Install novnc and any necessary dependencies
+RUN apt-get update && \
+    apt-get install -y novnc websockify supervisor && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Expose the port for novnc
+EXPOSE 6080
+
+# Create supervisord configuration file for novnc
+RUN echo "[supervisord]" > /etc/neko/supervisord/novnc.conf && \
+    echo "nodaemon=true" >> /etc/neko/supervisord/novnc.conf && \
+    echo "[program:novnc]" >> /etc/neko/supervisord/novnc.conf && \
+    echo "command=websockify --web=/usr/share/novnc 6080 localhost:5901" >> /etc/neko/supervisord/novnc.conf
+
+# Install code-server latest version
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+# Create supervisord configuration file for novnc
+RUN echo "[supervisord]" > /etc/neko/supervisord/code-server.conf && \
+    echo "nodaemon=true" >> /etc/neko/supervisord/code-server.conf && \
+    echo "[program:code-server]" >> /etc/neko/supervisord/code-server.conf && \
+    echo "command=code-server --bind-addr=0.0.0.0:9080 --auth=none" >> /etc/neko/supervisord/code-server.conf
+

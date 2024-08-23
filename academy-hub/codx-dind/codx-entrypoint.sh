@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "Running codx-entrypoint. Check docker engine"
 until docker ps
 do
   echo "waiting for docker..."
