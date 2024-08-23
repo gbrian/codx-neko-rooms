@@ -1,8 +1,10 @@
 
-USER=${1:admin}
-PASSWORD=${2:admin}
+USER=${USER:admin}
+PASSWORD=${PASSWORD:admin}
 AUTO_IP=$(curl -s ifconfig.me)
 IP=${IP:-$AUTO_IP}
+
+echo "INSTALLING WITH IP=$IP USER=$USER PWD=$PASSWORD"
 
 # Generate auth file
 docker run --rm \
