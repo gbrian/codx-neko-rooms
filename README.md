@@ -4,7 +4,7 @@ neko-rooms installer for codx platform
 Install codx-neko-rooms
 
 ```
-curl -sL https://raw.githubusercontent.com/gbrian/codx-neko-rooms/main/installer.sh | bash -s -- $IP $USER_NAME $PASSWSORD
+curl -sL https://raw.githubusercontent.com/gbrian/codx-neko-rooms/main/installer.sh | IP= USER= PASSWORD= bash -s
 ```
 
 Where:
